@@ -1,0 +1,159 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "master",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.mjs",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/src/test-setup.[jt]s"
+    ],
+    "sharedGlobals": []
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/js/typescript",
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        },
+        "build": {
+          "targetName": "build",
+          "configName": "tsconfig.lib.json",
+          "buildDepsName": "build-deps",
+          "watchDepsName": "watch-deps"
+        }
+      },
+      "exclude": [
+        "packages/core/common/*",
+        "packages/core/extension/*",
+        "packages/core/service/*",
+        "packages/acf/common/*",
+        "packages/acf/events/*",
+        "packages/acf/service/*",
+        "packages/acf/store/*",
+        "packages/acf/util/*",
+        "packages/acf/main-world/*",
+        "packages/shared/discord-messaging/*",
+        "packages/shared/discord-oauth/*",
+        "packages/shared/firebase-database/*",
+        "packages/shared/firebase-firestore/*",
+        "packages/shared/firebase-functions/*",
+        "packages/shared/firebase-oauth/*",
+        "packages/shared/firebase-storage/*",
+        "packages/shared/google-analytics/*",
+        "packages/shared/google-drive/*",
+        "packages/shared/google-oauth/*",
+        "packages/shared/google-sheets/*",
+        "packages/shared/notifications/*",
+        "packages/shared/openai/*",
+        "packages/shared/sandbox/*",
+        "packages/shared/shared-util/*",
+        "packages/shared/status-bar/*",
+        "packages/shared/vision/*",
+        "packages/context/*",
+        "packages/ui/*"
+      ]
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "testTargetName": "test",
+        "serveTargetName": "serve",
+        "devTargetName": "dev",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static",
+        "typecheckTargetName": "typecheck",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps"
+      }
+    },
+    {
+      "plugin": "@nx/js/typescript",
+      "include": [
+        "packages/core/common/*",
+        "packages/core/extension/*",
+        "packages/core/service/*",
+        "packages/acf/common/*",
+        "packages/acf/events/*",
+        "packages/acf/service/*",
+        "packages/acf/store/*",
+        "packages/acf/util/*",
+        "packages/acf/main-world/*",
+        "packages/shared/discord-messaging/*",
+        "packages/shared/discord-oauth/*",
+        "packages/shared/firebase-database/*",
+        "packages/shared/firebase-firestore/*",
+        "packages/shared/firebase-functions/*",
+        "packages/shared/firebase-oauth/*",
+        "packages/shared/firebase-storage/*",
+        "packages/shared/google-analytics/*",
+        "packages/shared/google-drive/*",
+        "packages/shared/google-oauth/*",
+        "packages/shared/google-sheets/*",
+        "packages/shared/notifications/*",
+        "packages/shared/openai/*",
+        "packages/shared/sandbox/*",
+        "packages/shared/shared-util/*",
+        "packages/shared/status-bar/*",
+        "packages/shared/vision/*",
+        "packages/context/*",
+        "packages/ui/*"
+      ],
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        }
+      }
+    },
+    {
+      "plugin": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps"
+      }
+    }
+  ],
+  "targetDefaults": {
+    "test": {
+      "dependsOn": ["^build", "^build"]
+    }
+  },
+  "generators": {
+    "@nx/react": {
+      "application": {
+        "babel": true,
+        "style": "scss",
+        "linter": "eslint",
+        "bundler": "vite"
+      },
+      "component": {
+        "style": "scss"
+      },
+      "library": {
+        "style": "scss",
+        "linter": "eslint"
+      }
+    },
+    "@nx/web:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "vitest",
+      "e2eTestRunner": "none"
+    }
+  },
+  "sync": { "applyChanges": true }
+}

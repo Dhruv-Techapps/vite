@@ -1,0 +1,63 @@
+{
+  "name": "Auto Clicker - AutoFill",
+  "short_name": "__MSG_EXT_SHORT_NAME__",
+  "description": "__MSG_EXT_DESCRIPTION__",
+  "version": "5.0.0",
+  "manifest_version": 3,
+  "default_locale": "en",
+  "permissions": ["storage", "notifications", "contextMenus", "activeTab", "identity", "alarms", "unlimitedStorage", "scripting"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "64": "assets/icons/icon64.png",
+    "96": "assets/icons/icon96.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "action": {
+    "default_icon": "assets/icons/icon64.png"
+  },
+  "background": {
+    "service_worker": "main.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["styles.css"],
+      "js": ["content_scripts.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_scripts_main.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["webcomponents/webcomponents-bundle.js", "wizard-popup.js", "wizard.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "externally_connectable": {
+    "matches": ["http://localhost:*/*", "https://*.getautoclicker.com/*", "https://*.getdataentry.com/*"]
+  },
+  "oauth2": {
+    "client_id": "1068181857899-u8kurrhqoph1ht9d4psotb25ivvjhhft.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
+  },
+  "sandbox": {
+    "pages": ["html/sandbox.html"]
+  },
+  "devtools_page": "devtools.html",
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*", "css/*", "html/*", "*.js.map"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

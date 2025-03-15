@@ -1,0 +1,29 @@
+{
+  "name": "@dhruv-techapps/acf-i18n",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "acf-i18n",
+    "targets": {
+      "serve": {
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "acf-i18n:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "acf-i18n:build:development"
+          },
+          "production": {
+            "buildTarget": "acf-i18n:build:production"
+          }
+        }
+      }
+    }
+  }
+}
