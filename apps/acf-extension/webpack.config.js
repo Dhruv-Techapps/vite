@@ -1,9 +1,9 @@
-const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
-const { join } = require('path');
+const { composePlugins, withNx } = require('@nx/webpack');
+const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const { BannerPlugin } = require('webpack');
 const path = require('path');
+const { BannerPlugin } = require('webpack');
 const fs = require('fs');
 
 function modify(buffer, { KEY, VITE_PUBLIC_NAME, OAUTH_CLIENT_ID, VITE_PUBLIC_RELEASE_VERSION }) {
@@ -22,67 +22,87 @@ function modify(buffer, { KEY, VITE_PUBLIC_NAME, OAUTH_CLIENT_ID, VITE_PUBLIC_RE
   return JSON.stringify(manifest, null, 2);
 }
 
-module.exports = {
-  output: {
-    path: join(__dirname, '../../dist/acf-extension'),
-  },
-  plugins: [
-    new NxAppWebpackPlugin({
-      tsConfig: './tsconfig.app.json',
-      compiler: 'swc',
-      main: './src/background/index.ts',
-      additionalEntryPoints: [
-        {
-          entryName: 'content_scripts',
-          entryPath: './src/content_scripts/index.ts',
-        },
-        {
-          entryName: 'content_scripts_main',
-          entryPath: './src/content_scripts_main/index.ts',
-        },
-        {
-          entryName: 'wizard',
-          entryPath: './src/wizard/index.ts',
-        },
-        {
-          entryName: 'wizard-popup',
-          entryPath: './src/wizard/popup/wizard-popup.ts',
-        },
-        {
-          entryName: 'devtools',
-          entryPath: './src/devtools/index.ts',
-        },
-      ],
-      styles: ['./src/wizard/popup/wizard-popup.scss', 'packages/shared/status-bar/src/lib/status-bar.scss'],
-      extractCss: true,
-      generateIndexHtml: false,
-      outputHashing: 'none',
-      optimization: process.env['NODE_ENV'] === 'production',
-      vendorChunk: false,
-      extractLicenses: process.env['NODE_ENV'] === 'production',
-      sourceMap: true,
-    }),
-    new CopyPlugin({
-      patterns: [
-        { from: `**/messages.json`, to: './_locales', context: `../../apps/acf-i18n/src/assets/locales` },
-        { from: path.join(__dirname, 'assets', process.env.VITE_PUBLIC_VARIANT), to: './assets' },
-        { from: `./*.html`, to: './html', context: 'src/wizard/popup' },
-        { from: `./*.html`, to: './', context: 'src/devtools' },
-        { from: `./*.html`, to: './html', context: '../../packages/shared/sandbox/src/lib' },
-        { from: path.join(__dirname, '../../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js'), to: './webcomponents' },
-        {
-          from: './src/manifest.json',
-          to: './manifest.json',
-          transform(content) {
-            return modify(content, process.env);
+module.exports = composePlugins(
+  // Default Nx composable plugin
+  withNx(),
+  // Custom composable plugin
+  (config, { options }) => {
+    // `config` is the Webpack configuration object
+    // `options` is the options passed to the `@nx/webpack:webpack` executor
+    // `context` is the context passed to the `@nx/webpack:webpack` executor
+    // customize configuration here
+    config.output.clean = true;
+    config.devServer = {
+      devMiddleware: {
+        writeToDisk: true, // 👈 write the in-memory files to disk
+      },
+      static: {
+        directory: path.join(__dirname, 'dist'),
+      },
+      compress: true,
+      hot: true,
+    };
+    config.entry = {
+      background: './src/background/index.ts',
+      content_scripts: './src/content_scripts/index.ts',
+      content_scripts_main: './src/content_scripts_main/index.ts',
+      wizard: './src/wizard/index.ts',
+      wizard_popup: ['./src/wizard/popup/wizard-popup.ts', './src/wizard/popup/wizard-popup.scss'],
+      devtools: './src/devtools/index.ts',
+      status_bar: '../../packages/shared/status-bar/src/lib/status-bar.scss',
+    };
+    if (config.module.rules) {
+      config.module.rules.push({
+        test: /\.scss$/,
+        use: [{ loader: 'file-loader', options: { publicPath: path.resolve(__dirname, 'dist'), outputPath: '/css', name: '[name].min.css' } }, 'sass-loader'],
+      });
+      config.module.rules[2].options.cacheDirectory = path.resolve(options.root, 'node_modules/.cache/babel-loader');
+    }
+    config.plugins.push(
+      new CopyPlugin({
+        patterns: [
+          { from: `**/messages.json`, to: './_locales', context: `${options.root}/apps/acf-i18n/src/assets/locales` },
+          { from: path.join(__dirname, 'assets', config.watch ? 'DEV' : process.env.VITE_PUBLIC_VARIANT), to: './assets' },
+          { from: `./*.html`, to: './html', context: 'src/wizard/popup' },
+          { from: `./*.html`, to: './', context: 'src/devtools' },
+          { from: `./*.html`, to: './html', context: '../../packages/shared/sandbox/src/lib' },
+          { from: path.join(options.root, './node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js'), to: './webcomponents' },
+          {
+            from: './src/manifest.json',
+            to: './manifest.json',
+            transform(content) {
+              return modify(content, process.env);
+            },
           },
-        },
-      ],
-    }),
-    new Dotenv({
-      path: './.env',
-      systemvars: true,
-    }),
-    new BannerPlugin(fs.readFileSync('./LICENSE', 'utf8')),
-  ],
-};
+        ],
+      }),
+      new Dotenv({
+        path: `${options.root}/.env`,
+        systemvars: true,
+      }),
+      new BannerPlugin(fs.readFileSync('./LICENSE', 'utf8'))
+    );
+    if (process.env.VITE_PUBLIC_VARIANT === 'PROD') {
+      config.plugins.push(
+        sentryWebpackPlugin({
+          org: 'dhruv-techapps',
+          project: 'acf-extension',
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+          release: {
+            name: process.env.VITE_PUBLIC_RELEASE_VERSION?.replace('v', ''),
+          },
+          bundleSizeOptimizations: {
+            excludeDebugStatements: true,
+            // Only relevant if you added `browserTracingIntegration`
+            excludePerformanceMonitoring: true,
+            // Only relevant if you added `replayIntegration`
+            excludeReplayIframe: true,
+            excludeReplayShadowDom: true,
+            excludeReplayWorker: true,
+          },
+        })
+      );
+    }
+    return config;
+  }
+);
