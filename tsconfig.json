@@ -92,6 +92,12 @@
     },
     {
       "path": "./apps/acf-extension"
+    },
+    {
+      "path": "./apps/acf-configs"
+    },
+    {
+      "path": "./packages/ui"
     }
   ]
 }

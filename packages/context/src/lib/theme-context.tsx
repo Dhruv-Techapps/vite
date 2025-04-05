@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useState } from 'react';
+import React, { createContext, PropsWithChildren, useState } from 'react';
 
 export const ThemeContext = createContext({
   theme: localStorage.getItem('theme') || 'light',

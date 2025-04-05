@@ -129,7 +129,7 @@
   ],
   "targetDefaults": {
     "test": {
-      "dependsOn": ["^build", "^build"]
+      "dependsOn": ["^build"]
     }
   },
   "generators": {
@@ -155,5 +155,7 @@
       "e2eTestRunner": "none"
     }
   },
-  "sync": { "applyChanges": true }
+  "sync": {
+    "applyChanges": true
+  }
 }

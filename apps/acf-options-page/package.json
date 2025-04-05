@@ -1,5 +1,11 @@
 {
   "name": "@dhruv-techapps/acf-options-page",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "nx": {
+    "name": "acf-options-page",
+    "tags": [
+      "scope:app"
+    ]
+  }
 }

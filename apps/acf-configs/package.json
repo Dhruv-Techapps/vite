@@ -1,9 +1,9 @@
 {
-  "name": "@dhruv-techapps/acf-extension",
+  "name": "@dhruv-techapps/acf-configs",
   "version": "0.0.1",
   "private": true,
   "nx": {
-    "name": "acf-extension",
+    "name": "acf-configs",
     "tags": [
       "scope:app"
     ]
