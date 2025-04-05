@@ -1,109 +1,105 @@
-# DhruvTechapps
+# Auto Clicker Auto Fill
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Auto click, fill, submit with AutoClicker
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+Fill input field or click button or link anything anywhere. easy configure in few steps and work like PRO.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+--- 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/53bda8a642194c29bb27326df9ed5823)](https://app.codacy.com/gh/Dhruv-Techapps/auto-clicker-auto-fill/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+---
 
-## Generate a library
+## Table of Contents
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
-```
+1. [Overview](#overview)
+   - [acf-extension](#acf-extension)
+   - [acf-i18n](#acf-i18n)
+   - [acf-options-page](#acf-options-page)
+2. [Changes](#changes)
+3. [Running Tasks](#running-tasks)
 
-## Run tasks
+---
 
-To build the library use:
+## Overview
 
-```sh
-npx nx build pkg1
-```
+This project is divided into three main components, each serving a specific purpose.
 
-To run any task with Nx use:
+### acf-extension
 
-```sh
-npx nx <target> <project-name>
-```
+The `acf-extension` is a Chrome extension designed to [provide a short description of what the extension does].
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### acf-i18n
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+The `acf-i18n` component is responsible for managing language translations. It ensures the project is accessible to users across different linguistic backgrounds.
 
-## Versioning and releasing
+### acf-options-page
 
-To version and release the library use
+The `acf-options-page` serves as the configuration page for your project. Users can customize settings and preferences through this interface.
 
-```
-npx nx release
-```
+---
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+## Changes
 
-[Learn more about Nx release &raquo;](hhttps://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Before getting started, make sure to create a new `.env` file from the provided `.env.example` under the `acf-extension` and `acf-options-page` directories.
 
-## Keep TypeScript project references up to date
+---
 
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
+## Running Tasks
 
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+Follow these steps to set up and run the project:
 
-```sh
-npx nx sync
-```
+1. Install dependencies:
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+   ```bash
+   npm i
+   ```
 
-```sh
-npx nx sync:check
-```
+2. Install Nx globally:
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+   ```bash
+   npm i nx --global
+   ```
 
-## Set up CI!
+3. Serve the components:
 
-### Step 1
+   ```bash
+   nx run-many -t serve
+       - acf-extension
+       - acf-options-page
+       - acf-i18n
+   ```
 
-To connect to Nx Cloud, run the following command:
+4. Run linting:
 
-```sh
-npx nx connect
-```
+   ```bash
+   nx run-many -t lint
+   ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+5. Run testing:
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+   ```bash
+   nx run-many -t test
+   ```
 
-### Step 2
+6. Run Format:
 
-Use the following command to configure a CI workflow for your workspace:
+   ```bash
+   nx format:check
+   ```
 
-```sh
-npx nx g ci-workflow
-```
+---
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Important Links
 
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- [Docs](https://stable.getautoclicker.com/docs/4.x/getting-started/introduction/)
+- [Examples](https://gist.github.com/dharmesh-hemaram)
+- [Blog](https://blog.getautoclicker.com/)
+- Variant
+  - [Stable](https://stable.getautoclicker.com)
+  - [Beta](https://beta.getautoclicker.com)
+  - [Dev](https://dev.getautoclicker.com)
+- [Google Group](https://groups.google.com/g/auto-clicker-autofill)
+- [GitHub](https://github.com/Dhruv-Techapps)
+- [Twitter](https://twitter.com/dharmeshhemaram)
+- [Open Collective](https://opencollective.com/auto-clicker-autofill)
+- [Discord](https://discord.gg/vmnNfWKqnR)
+- [YouTube](https://www.youtube.com/@autoclickerautofill)

@@ -1,0 +1,36 @@
+name: feature [push]
+
+on:
+  pull_request:
+
+jobs:
+  main:
+    name: Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      actions: 'read'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - uses: nrwl/nx-set-shas@v3
+      - run: |
+          echo "BASE: ${{ env.NX_BASE }}"
+          echo "HEAD: ${{ env.NX_HEAD }}"
+      # This line is needed for nx affected to work when CI is running on a PR
+      - run: git branch --track main origin/main
+        if: ${{ github.event_name == 'pull_request' }}
+      - run: npm ci
+      - run: npx nx format:check
+      - run: npx nx affected --target=lint --parallel=3
+      - run: npx nx affected --target=test --parallel=3 --exclude='tag:puppeteer' --ci --code-coverage
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: 'coverage'

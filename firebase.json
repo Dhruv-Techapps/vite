@@ -1,0 +1,82 @@
+{
+  "hosting": [
+    {
+      "site": "auto-clicker-autofill-configs",
+      "public": "acf-configs",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "site": "auto-clicker-auto-fill-dev",
+      "public": "dist/apps/acf-options-page",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "site": "auto-clicker-auto-fill-beta",
+      "public": "dist/apps/acf-options-page",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "site": "auto-clicker-auto-fill-prod",
+      "public": "dist/apps/acf-options-page",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "site": "auto-clicker-auto-fill-static",
+      "public": "apps/acf-i18n/src",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "apps/acf-i18n/src/*.[mjs|ts]"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**/*.json",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": "GET, OPTIONS"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "Content-Type"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

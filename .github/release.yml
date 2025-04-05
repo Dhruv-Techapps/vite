@@ -1,0 +1,15 @@
+changelog:
+  categories:
+    - title: 🏕 Features
+      labels:
+        - '*'
+      exclude:
+        labels:
+          - 'type : Bug'
+          - 'type : Dependencies'
+    - title: 🐛 Bug
+      labels:
+        - 'type : Bug'
+    - title: 👒 Dependencies
+      labels:
+        - 'type : Dependencies'
