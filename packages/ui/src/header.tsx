@@ -1,8 +1,7 @@
-import { ThemeContext } from '@dhruv-techapps/context';
-import { FC, PropsWithChildren, useContext, useState } from 'react';
+import React, { FC, PropsWithChildren, useState } from 'react';
 import { Container, Nav, NavDropdown, Navbar, Offcanvas } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Github, Moon, Sun, ThreeDots, Youtube } from './assets/svg';
+import { Github, ThreeDots, Youtube } from './assets/svg';
 import { APP_LANGUAGES, APP_LINK, SOCIAL_LINKS } from './constants';
 
 type HeaderProps = {
@@ -14,8 +13,6 @@ export const Header: FC<HeaderProps> = ({ children, onHomeClick }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const { t, i18n } = useTranslation();
-
-  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const changeLanguage = async (lng: string) => {
     await i18n.changeLanguage(lng);
@@ -80,13 +77,6 @@ export const Header: FC<HeaderProps> = ({ children, onHomeClick }) => {
               <Nav.Item as='li' className='py-2 py-lg-1 col-12 col-lg-auto'>
                 <div className='vr d-none d-lg-flex h-100 mx-lg-2 text-white'></div>
                 <hr className='d-lg-none my-2 text-white-50'></hr>
-              </Nav.Item>
-
-              <Nav.Item as='li' className='col-6 col-lg-auto'>
-                <Nav.Link onClick={toggleTheme} data-testid='switch-theme'>
-                  {theme !== 'light' ? <Sun title={t('header.theme.dark')} /> : <Moon title={t('header.theme.light')} />}
-                  <small className='d-lg-none ms-2'>Toggle Theme</small>
-                </Nav.Link>
               </Nav.Item>
 
               <Nav.Item as='li' className='col-6 col-lg-auto'>

@@ -1,6 +1,5 @@
 /* The following line can be included in a src/App.scss */
-@import '~bootstrap/scss/bootstrap';
-@import '../../../packages/ui/src/styles/index';
+@use '../../../packages/ui/src/styles/index';
 
 .ais-SearchBox {
   margin-bottom: 1em;

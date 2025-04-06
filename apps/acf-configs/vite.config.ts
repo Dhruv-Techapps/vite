@@ -1,9 +1,16 @@
 /// <reference types='vitest' />
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
+import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
 
 export default defineConfig(() => ({
   root: __dirname,
+  resolve: {
+    alias: {
+      '@acf-configs': path.resolve(__dirname, 'src'),
+    },
+  },
   cacheDir: '../../node_modules/.vite/apps/acf-configs',
   server: {
     port: 4200,
@@ -13,7 +20,18 @@ export default defineConfig(() => ({
     port: 4300,
     host: 'localhost',
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    svgr({
+      svgrOptions: {
+        exportType: 'named',
+        ref: true,
+        svgo: false,
+        titleProp: true,
+      },
+      include: '**/*.svg',
+    }),
+  ],
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],

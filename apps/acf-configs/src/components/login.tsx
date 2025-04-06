@@ -1,15 +1,12 @@
 import { LOCAL_STORAGE_KEY } from '@dhruv-techapps/acf-common';
-import { ThemeContext } from '@dhruv-techapps/context';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import React, { useContext } from 'react';
+import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import GoogleSignInDark from '../assets/btn_google_signin_dark_normal_web.png';
 import GoogleSignInLight from '../assets/btn_google_signin_light_normal_web.png';
 import { auth } from '../firebase';
 
 const Login: React.FC = () => {
-  const { theme } = useContext(ThemeContext);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -44,7 +41,7 @@ const Login: React.FC = () => {
 
       <h3>Please Sign in</h3>
       <Button variant='link' data-testid='google-sign-in' onClick={handleSubmit}>
-        <img src={theme === 'light' ? GoogleSignInLight : GoogleSignInDark} alt='Logo' />
+        <img src={GoogleSignInLight} alt='Logo' />
       </Button>
     </div>
   );
